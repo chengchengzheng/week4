@@ -65,6 +65,9 @@ The assignment and update steps are repeated iteratively until the centroids no 
 
 Below, you'll find a basic implementation of the K-means clustering algorithm. This serves as a foundational understanding and a starting point for applying the algorithm to your specific data analysis tasks.
 
+In Google Colab, the script mounts Google Drive using drive.mount(‘/content/drive’) for seamless access to the dataset. In addition, Rasterio and netCDF4 for geospatial raster data are mounted to process large-scale scientific data.
+
+The script generates 100 random number data points using scikit-learn, initialises a K-means model with four clusters, and assigns a value to each point using kmeans.fit(X). The scatterplot visualises the clusters with colour-coded points and the calculated centroids are marked with black dots. The scatterplot displayed via plt.show() illustrates how K-means groups data for pattern recognition and segmentation.
 
 ```python
 from google.colab import drive
@@ -102,6 +105,9 @@ plt.show()
 
 <img width="563" alt="截屏2025-02-18 19 58 45" src="https://github.com/user-attachments/assets/a805964e-f299-4d0f-9b40-58cd63ae22e1" />
 
+### Image resolution: 
+Visualisation of K-mean clustering results in randomly generated data plots. The solid grey dots represent the centre of mass of each cluster, and the four coloured groups of coloured dots indicate the division of a data sample into four clusters.
+
 <!-- Gaussian Mixture Models (GMM) [Bishop and Nasrabadi, 2006] -->
 ### Gaussian Mixture Models (GMM) [Bishop and Nasrabadi, 2006]
 #### Introduction to Gaussian Mixture Models
@@ -112,6 +118,7 @@ Gaussian Mixture Models (GMM) are a probabilistic model for representing normall
 Gaussian Mixture Models are particularly powerful in scenarios where:
 
 ·**Soft clustering is needed**: Unlike K-means, GMM provides the probability of each data point belonging to each cluster, offering a soft classification and understanding of the uncertainties in our data.
+
 ·**Flexibility in cluster covariance**: GMM allows for clusters to have different sizes and different shapes, making it more flexible to capture the true variance in the data.
 
 #### Key Components of GMM
@@ -138,6 +145,8 @@ Cluster Shape Flexibility: Can adapt to ellipsoidal cluster shapes, thanks to th
 
 Below, you'll find a basic implementation of the Gaussian Mixture Model. This should serve as an initial guide for understanding the model and applying it to your data analysis projects.
 
+ The code uses GaussianMixture from sklearn.mixture, along with matplotlib for visualization and numpy for calculations. It creates 100 random points in 2D space, sets up a GMM with three clusters, and fits the model to the data. The model then predicts cluster assignments. The results are shown in a scatter plot, where points are colored by cluster, and cluster centers (means) are marked in black. This example shows how GMM groups data using probability distributions.
+ 
 ```python
 from sklearn.mixture import GaussianMixture
 import matplotlib.pyplot as plt
@@ -161,7 +170,10 @@ plt.show()
 
 <img width="571" alt="截屏2025-02-18 20 00 03" src="https://github.com/user-attachments/assets/2b398b88-57f4-41e7-b1fc-cc0d7b9ff3f2" />
 
-#### Image Classification
+### Image resolution
+Visualisation of clustering results for random data using GMM. Three colours were used to divide the 100 data points into three clusters, with the solid grey points representing the K-means.
+
+## Image Classification
 Now, let's explore the application of these unsupervised methods to image classification tasks, focusing specifically on distinguishing between sea ice and leads in Sentinel-2 imagery.
 
 ## K-Means Implementation
@@ -213,7 +225,12 @@ del kmeans, labels, band_data, band_stack, valid_data_mask, X, labels_image
 
 <img width="593" alt="截屏2025-02-18 20 04 10" src="https://github.com/user-attachments/assets/3eddeb79-e1f8-4e81-abc2-08aabde12055" />
 
-### GMM Implementation
+### Image resolution
+This image shows the results of K-means clustering for the Sentinel-2 B4 optical band, with the image divided into two regions of pixels using two colours, with the yellow regions possibly representing sea ice or land, and the darker regions representing open water or other surface types. The colour bar shows the clustering labels, and -1 indicates a region of no data. This classification method allows for better differentiation of surface features in remotely sensed images.
+
+## GMM Implementation
+
+The Gaussian Mixture Model (GMM) implementation is used for clustering tasks where data points belong to multiple overlapping groups. Unlike K-means, which assigns each point to a single cluster, GMM uses probability distributions to model the data, making it useful in Image Segmentation – Separating different objects in an image based on pixel intensities.
 
 ```python
 import rasterio
@@ -367,7 +384,8 @@ plt.title('Plot of 10 equally spaced functions where clusters_gmm = 0 (aligned)'
 
 ### Compare with ESA data
 
-In the ESA dataset, sea ice = 1 and lead = 2. Therefore, we need to subtract 1 from it so our predicted labels are comparable with the official product labels.
+In the ESA dataset, sea ice = 1 and lead = 2.To ensure compatibility with machine learning models that use zero-based indexing, 1 is subtracted from all values in `flag_cleaned`, creating `flag_cleaned_modified`, which maintains the same structure but shifts values down by one.  
+
 To evaluate the Gaussian Mixture Model (GMM) clustering, the true labels from `flag_cleaned_modified` are compared with the predicted labels from `clusters_gmm`. The confusion matrix (`confusion_matrix(true_labels, predicted_gmm)`) summarizes correct and misclassified instances, while the classification report (`classification_report(true_labels, predicted_gmm)`) provides key performance metrics, including precision, recall, and F1-score for each class.  
 
 The results indicate high accuracy, with 8,856 sea ice and 3,293 lead instances correctly classified, and only 22 misclassified as sea ice and 24 misclassified as lead. With an overall accuracy of 100%, the GMM model effectively distinguishes between the two classes.
