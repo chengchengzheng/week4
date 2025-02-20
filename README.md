@@ -1,21 +1,68 @@
 # Week4 Assignment
 This repository utilizes machine learning to classify echoes into leads and sea ice.  
 It computes the average echo shape and standard deviation for both categories and evaluates classification performance by comparing the results with ESA's official classification using a confusion matrix.  
+
 ##  Project Overview  
 This project focuses on colocating Sentinel-3 (OLCI & SRAL) and Sentinel-2 optical data while leveraging unsupervised learning techniques to classify sea ice and leads.  
 The goal is to develop an automated pipeline that enhances Earth Observation (EO) analysis by fusing different satellite datasets and applying machine learning models to classify environmental features.  
 <!-- ABOUT THE PROJECT -->
+
 ### Built With
-- NumPy – Efficient numerical computations and matrix operations  
-- Pandas – Data manipulation and tabular processing  
-- Matplotlib – Visualization of classification results  
-- Rasterio – Handling Sentinel-2 geospatial raster data  
-- netCDF4 – Processing Sentinel-3 altimetry data  
-- Scikit-Learn – Machine learning models (K-Means, GMM)  
-- Folium – Interactive geospatial data visualization  
-- Shapely – Geometric operations for colocation analysis  
-- Requests – API calls for Sentinel-3 metadata retrieval
-  
+
+Among them, NumPy is responsible for numerical calculations and matrix operations, Pandas is used for data processing and table manipulation, and Matplotlib is mainly used for visualising classification results.  
+
+For geospatial data processing, Rasterio handles the raster data of Sentinel-2 and netCDF4 parses the altimetry data of Sentinel-3. Machine learning modelling relies on Scikit-Learning, where K-Means and GMM are used to classify the data, Folium is used to visualise the geospatial data, and Shapely supports the localisation analysis through geometric manipulation. In addition, Requests obtains Sentinel-3 metadata through an API for further analysis.  
+
+These tools work together to make EO data analysis more efficient and accurate.
+
+<!-- Colocating Sentinel-3 OLCI/SRAL and Sentinal-2 Optical Data -->
+## Colocating Sentinel-3 OLCI/SRAL and Sentinal-2 Optical Data
+
+In this section, we explore in detail the pairing of Sentinel-3 data with Sentinel-2 optical data. Data synchronisation between the two satellite missions enables powerful synergies, taking advantage of the high spatial resolution of Sentinel-2 and the comprehensive coverage and synchronisation of altimeter data with Sentinel-3. This fusion of data sets provides a richer and more detailed view of the Earth's surface. In particular, sea ice and lead are classified.
+
+In the following sections, we will guide you through the steps necessary to identify and align these datasets.
+
+### Step 0: Read in Functions Needed
+
+This process loads functions to retrieve Sentinel-2 and Sentinel-3 metadata efficiently, following the Week 3 approach.  In Google Colab, Google Drive is mounted for easy file access.
+
+Using requests, pandas, shape, and folium scripts: first acquire and process Copernicus dataspace ecosystem data. Then authenticate using access tokens. Query the data by date, location, and cloudiness. Then retrieve Sentinel-3 OLCI, SRAL, and Sentinel-2 optical data. Download products using unique ids and match images by geo-overlays and visualise results via interactive maps. Finally set up timestamps for scientific research and Earth observations.
+
+### Step 1: Get the Metadata for satellites (Sentinel-2 and Sentinel-3 OLCI in this case)
+
+This example demonstrates how to co-locate Sentinel-2 and Sentinel-3 OLCI data by retrieving their metadata separately, following the Week 3 methodology. Metadata for both satellites sentinel3_olci_data and sentinel2_data is fetched to identify common observation locations. Authentication is required to obtain and refresh access tokens before setting the date range and file path for retrieval. The script queries Sentinel-3 OLCI and Sentinel-2 optical data using query_sentinel3_olci_arctic_data() and query_sentinel2_arctic_data(), then saves the metadata as sentinel3_olci_metadata.csv and sentinel2_metadata.csv. For better visualization, the data is displayed in structured tables using IPython’s display(), allowing easy inspection of product IDs, timestamps, footprints, and cloud cover.
+
+<img width="1565" alt="截屏2025-02-20 18 54 45" src="https://github.com/user-attachments/assets/489c786e-06d3-4182-8651-53115c09cbbc" />
+
+<img width="1560" alt="截屏2025-02-20 18 55 23" src="https://github.com/user-attachments/assets/6499a9f7-8ca6-4afb-9245-fabaf3cf71c4" />
+
+Both tables present metadata for Sentinel-3 OLCI images and Sentinel-2 images, respectively, and the data in the tables are critical for further analysing Sentinel-3 OLCI images and Sentinel-2 images, geographic extent and common location.
+
+
+### Co-locate the data
+
+In this section we use the metadata we have just produced to produce the co-location pair details. The logic of the code is match rows from S2 and S3 OLCI by their geo_footprint.
+
+<img width="1264" alt="截屏2025-02-20 18 53 03" src="https://github.com/user-attachments/assets/6b4f45e9-d1c7-478d-8313-9e2a74950dbf" />
+
+This table displays shows the matched Sentinel-2 and Sentinel-3 OLCI observations. Each row contains detailed information about the two satellites, including their unique IDs, geographic coverage, and the time frame in which the observations overlap within a 10-minute window. This data can help to verify the successful identification of co-located satellite data for further analysis.
+
+<img width="454" alt="截屏2025-02-20 19 09 42" src="https://github.com/user-attachments/assets/f8cb1833-3aa5-4fe0-8b68-4cb9ebc1430c" />
+
+This interactive visual map shows the geographic footprint of the first five co-located satellite observations from Sentinel-2 and Sentinel-3 OLCI. The area delineated by the blue highlights is the area of data overlap between the two satellites, which represents the area where both satellites made observations during the specified time window.
+
+### Proceeding with Sentinel-3 OLCI Download
+
+Moving forward, we turn our attention to downloading the Sentinel-3 OLCI data. The process mirrors the approach we took with Sentinel-2, maintaining consistency in our methodology. We'll apply the same logic of filename conversion and follow the structured steps to retrieve the data from the Copernicus dataspace.
+
+### Sentinel-3 SRAL
+
+This procedure integrates Sentinel-3 SRAL altimetry data with Sentinel-2 and Sentinel-3 OLCI observations to extend co-location analyses. query_sentinel3_sral_arctic_data() retrieves SRAL metadata for a specified date range via access tokens and stores it as s3_sral_metadata.csv. The previously saved s3_sral_metadata.csv and sentinel2_metadata.csv are loaded via pd.read_csv(), and ContentDate timestamps are normalised using eval(), pd.to_datetime() and make_timezone_naive() check_collocation() identifies overlapping Sentinel-2 and SRAL observations within a 10-minute window and stores the results. plot_results() plots the first five matches using GeoJSON, and display() renders an interactive world map to help the user analyse spatial relationships and assess co-location accuracy.
+
+<img width="455" alt="截屏2025-02-20 19 09 17" src="https://github.com/user-attachments/assets/496fa747-7d8c-4b36-a722-05f2972f0bc7" />
+
+This interactive map shows the alignment and process route of the Sentinel-2 and Sentinel-3 SRAL satellite data. The blue outlines represent detected overlapping geographic footprints demonstrating the alignment of the two satellite datasets in the Arctic region.
+
 <!-- Unsupervised Learning -->
 ## Unsupervised Learning
 This section marks our journey into another significant domain of machine learning and AI: unsupervised learning. Rather than delving deep into theoretical intricacies, our focus here will be on offering a practical guide. We aim to equip you with a clear understanding and effective tools for employing unsupervised learning methods in real-world (EO) scenarios.
