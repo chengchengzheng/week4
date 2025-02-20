@@ -77,38 +77,38 @@ The tasks in this notebook will be mainly two:
 
 <!-- Introduction to Unsupervised Learning Methods [Bishop and Nasrabadi, 2006] -->
 ### Introduction to Unsupervised Learning Methods [Bishop and Nasrabadi, 2006]
-**Introduction to K-means Clustering**
+### Introduction to K-means Clustering
 
 K-means clustering is a type of unsupervised learning algorithm used for partitioning a dataset into a set of k groups (or clusters), where k represents the number of groups pre-specified by the analyst. It classifies the data points based on the similarity of the features of the data {cite}macqueen1967some. The basic idea is to define k centroids, one for each cluster, and then assign each data point to the nearest centroid, while keeping the centroids as small as possible.
 
-**Why K-means for Clustering?**
+### Why K-means for Clustering?
 
 K-means clustering is particularly well-suited for applications where:
 
 The structure of the data is not known beforehand: K-means doesn’t require any prior knowledge about the data distribution or structure, making it ideal for exploratory data analysis.
 Simplicity and scalability: The algorithm is straightforward to implement and can scale to large datasets relatively easily.
 
-**Key Components of K-means**
+### Key Components of K-means**
 
-1.**Choosing K**: The number of clusters (k) is a parameter that needs to be specified before applying the algorithm.
+1.Choosing K: The number of clusters (k) is a parameter that needs to be specified before applying the algorithm.
 
-2.**Centroids Initialization**: The initial placement of the centroids can affect the final results.
+2.Centroids Initialization: The initial placement of the centroids can affect the final results.
 
-3.**Assignment Step**: Each data point is assigned to its nearest centroid, based on the squared Euclidean distance.
+3.Assignment Step: Each data point is assigned to its nearest centroid, based on the squared Euclidean distance.
 
-4.**Update Step**: The centroids are recomputed as the center of all the data points assigned to the respective cluster.
+4.Update Step: The centroids are recomputed as the center of all the data points assigned to the respective cluster.
 
-**The Iterative Process of K-means**
+### The Iterative Process of K-means**
 
 The assignment and update steps are repeated iteratively until the centroids no longer move significantly, meaning the within-cluster variation is minimised. This iterative process ensures that the algorithm converges to a result, which might be a local optimum.
 
-**Advantages of K-means**
+### Advantages of K-means**
 
-**Efficiency**: K-means is computationally efficient.
+fficiency: K-means is computationally efficient.
 
-**Ease of interpretation**: The results of k-means clustering are easy to understand and interpret.
+Ease of interpretation: The results of k-means clustering are easy to understand and interpret.
 
-**Basic Code Implementation**
+### Basic Code Implementation
 
 Below, you'll find a basic implementation of the K-means clustering algorithm. This serves as a foundational understanding and a starting point for applying the algorithm to your specific data analysis tasks.
 
@@ -164,22 +164,23 @@ Gaussian Mixture Models (GMM) are a probabilistic model for representing normall
 #### Why Gaussian Mixture Models for Clustering?
 Gaussian Mixture Models are particularly powerful in scenarios where:
 
-·**Soft clustering is needed**: Unlike K-means, GMM provides the probability of each data point belonging to each cluster, offering a soft classification and understanding of the uncertainties in our data.
+Soft clustering is needed: Unlike K-means, GMM provides the probability of each data point belonging to each cluster, offering a soft classification and understanding of the uncertainties in our data.
 
-·**Flexibility in cluster covariance**: GMM allows for clusters to have different sizes and different shapes, making it more flexible to capture the true variance in the data.
+Flexibility in cluster covariance: GMM allows for clusters to have different sizes and different shapes, making it more flexible to capture the true variance in the data.
 
 #### Key Components of GMM
 
 Number of Components (Gaussians): Similar to K in K-means, the number of Gaussians (components) is a parameter that needs to be set.
 Expectation-Maximization (EM) Algorithm: GMMs use the EM algorithm for fitting, iteratively improving the likelihood of the data given the model.
 Covariance Type: The shape, size, and orientation of the clusters are determined by the covariance type of the Gaussians (e.g., spherical, diagonal, tied, or full covariance).
+
 #### The EM Algorithm in GMM
 
 The Expectation-Maximization (EM) algorithm is a two-step process:
 
-·**Expectation Step (E-step)**: Calculate the probability that each data point belongs to each cluster.
+Expectation Step (E-step): Calculate the probability that each data point belongs to each cluster.
 
-·**Maximization Step (M-step)**: Update the parameters of the Gaussians (mean, covariance, and mixing coefficient) to maximize the likelihood of the data given these assignments.
+Maximization Step (M-step): Update the parameters of the Gaussians (mean, covariance, and mixing coefficient) to maximize the likelihood of the data given these assignments.
 
 This process is repeated until convergence, meaning the parameters do not significantly change from one iteration to the next.
 
@@ -217,13 +218,13 @@ plt.show()
 
 <img width="571" alt="截屏2025-02-18 20 00 03" src="https://github.com/user-attachments/assets/2b398b88-57f4-41e7-b1fc-cc0d7b9ff3f2" />
 
-### Image resolution
+#### Image resolution
 Visualisation of clustering results for random data using GMM. Three colours were used to divide the 100 data points into three clusters, with the solid grey points representing the K-means.
 
-## Image Classification
+### Image Classification
 Now, let's explore the application of these unsupervised methods to image classification tasks, focusing specifically on distinguishing between sea ice and leads in Sentinel-2 imagery.
 
-## K-Means Implementation
+### K-Means Implementation
 
 ```python
 import rasterio
@@ -275,7 +276,7 @@ del kmeans, labels, band_data, band_stack, valid_data_mask, X, labels_image
 ### Image resolution
 This image shows the results of K-means clustering for the Sentinel-2 B4 optical band, with the image divided into two regions of pixels using two colours, with the yellow regions possibly representing sea ice or land, and the darker regions representing open water or other surface types. The colour bar shows the clustering labels, and -1 indicates a region of no data. This classification method allows for better differentiation of surface features in remotely sensed images.
 
-## GMM Implementation
+### GMM Implementation
 
 The Gaussian Mixture Model (GMM) implementation is used for clustering tasks where data points belong to multiple overlapping groups. Unlike K-means, which assigns each point to a single cluster, GMM uses probability distributions to model the data, making it useful in Image Segmentation – Separating different objects in an image based on pixel intensities.
 
@@ -323,7 +324,8 @@ plt.colorbar(label='Cluster Label')
 plt.show()
 ```
 <img width="541" alt="截屏2025-02-18 20 30 45" src="https://github.com/user-attachments/assets/d1d19e89-cbbc-4c43-8da8-54136d0027c1" />
-### Image resolution
+
+#### Image resolution
 The images show the different clusters identified in the dataset and are represented with different colours and scales.
 
 ### Altimetry Classification
@@ -332,12 +334,12 @@ Now, let's explore the application of these unsupervised methods to altimetry cl
 
 This technique enhances the analysis of surface features while improving insights into ice dynamics and oceanic processes
 
-## Read in Functions Needed
+### Read in Functions Needed
 
 This Python script analyzes Sentinel-3 SAR altimetry data to classify sea ice and leads based on waveform characteristics like peakiness and stack standard deviation (SSD). It uses NumPy, SciPy, Matplotlib, and Scikit-learn for data processing and clustering with K-Means, DBSCAN, and GMM.  
 
 Key steps include:  
-- Extracting latitude, longitude, waveforms, and backscatter with `unpack_gpod`.  
+- Extracting latitude, longitude, waveforms, and backscatter with unpack_gpod.  
 - Interpolating data for consistency.  
 - Calculating SSD using Gaussian fitting to measure waveform variability.  
 - Standardizing data and removing NaN values.  
